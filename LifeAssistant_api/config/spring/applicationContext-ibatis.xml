@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="no" default-lazy-init="false">
+
+	<!-- sqlMapClient,Dao等 -->
+
+	<!--使用iBATIS,spring的工厂类（实现org.springframework.beans.factory.FactoryBean接口即可做为一个工厂类）
+		FactoryBean.getObject()返回的是该bean的实例,此处返回一了个com.ibatis.sqlmap.client.SqlMapClient实例
+		该类读取classpath:sqlMapConfig.xml并实例化一个SqlMapClient对象返回
+	-->
+	<bean id="sqlMapClient"
+		class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+	          <property name="dataSource" ref="dataSource" />
+<!--oracle -->      <property name="configLocation" value="classpath:sqlMapConfig.xml" />
+<!--sybase <property name="configLocation" value="classpath:sqlMapConfig_sybase.xml" />  -->
+	</bean>
+
+	<!-- 设定transactionManager,ibatis的事务管理 -->
+	<bean id="ibatisTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!--ibatis DAO,注入sqlMapClient对象 -->
+	<bean id="sqlDao" class="com.whty.common.dao.SqlDaoIBatisImpl">
+		<property name="dataSource" ref="dataSource"/>
+        <property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+</beans>

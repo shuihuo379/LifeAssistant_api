@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="whty.life">
+	<typeAlias alias="Music" type="com.whty.life.model.Music" />
+	
+	<resultMap class="Music" id="colmunMap">
+		<result property="id" column="ID" />
+		<result property="author" column="AUTHOR" />
+		<result property="musicUrl" column="MUSIC_URL" />
+		<result property="picUrl" column="PIC_URL" />
+		<result property="musicTitle" column="MUSIC_TITLE"/>
+	</resultMap>
+	
+	<select id="selectMusic" resultMap="colmunMap">
+		select * from t_music
+	</select>
+</sqlMap>

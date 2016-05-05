@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-autowire="no" default-lazy-init="false">
+	
+	<!-- 属性文件读入, 读取后properties文件中的属性会被Spring解析成变量的形式,在后面的配置中可以用${...}来引用,参见dataSource的配置 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+				<value>classpath:system.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 通用数据库连接池 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close" lazy-init="false"> <property name="driverClassName" 
+		value="${driverClassName}"/> <property name="url" value="${url}"/> <property 
+		name="username" value="${username}"/> <property name="password" value="${password}"/> 
+		<property name="initialSize" value="${initialSize}"/> <property name="maxActive" 
+		value="${maxActive}"/> <property name="maxIdle" value="${maxIdle}"/> <property 
+		name="maxWait" value="${maxWait}"/> </bean> -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>${driverClassName}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${url}</value>
+		</property>
+		<property name="user">
+			<value>${username}</value>
+		</property>
+		<property name="password">
+			<value>${password}</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>${maxIdleTime}</value>
+		</property>
+		<property name="preferredTestQuery">
+			<value>${preferredTestQuery}</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>${idleConnectionTestPeriod}</value>
+		</property>
+		<property name="testConnectionOnCheckin">
+			<value>${testConnectionOnCheckin}</value>
+		</property>
+		<property name="testConnectionOnCheckout">
+			<value>${testConnectionOnCheckout}</value>
+		</property>
+		<property name="initialPoolSize">
+			<value>${initialSize}</value>
+		</property>
+		<property name="minPoolSize">
+			<value>${minPoolSize}</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>${maxPoolSize}</value>
+		</property>
+	</bean>
+	<!-- EhCacheManager bean -->
+	<bean id="ehCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="shared" value="true" />
+	</bean>
+
+	<!-- <bean id="mongodbDataSource" class="com.whty.common.mongodb.MongodbDataSource"> 
+		<property name="addrs"><value>${mongodb.addrs}</value></property> <property 
+		name="slaveOk"><value>${mongodb.slaveOk}</value></property> <property name="dbName"><value>${mongodb.dbName}</value></property> 
+		</bean> <bean id="mongodbDao" class="com.whty.common.mongodb.impl.MongoDaoImpl"> 
+		<property name="mongodbDataSource" ref="mongodbDataSource" /> </bean> -->
+</beans>

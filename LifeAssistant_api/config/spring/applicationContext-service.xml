@@ -1,0 +1,8 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="no" default-lazy-init="false">
+	<bean id="musicService" class="com.whty.life.service.impl.MusicServiceImpl">
+		<property name="sqlDao" ref="sqlDao"/>
+	</bean>
+</beans>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="no" default-lazy-init="false">
+	<!-- struts action配置 scope取值有两种sington和prototype,如果配置为sington后有多个对象注入了该bean那么要设计为线程安全的 
+		因为struts的action可以在web层被同时多次调用,所以用prototype以保证线程安全 -->
+	<!-- 共用配置 -->
+	<bean id="app" class="com.whty.common.util.ApplicationUtil"></bean>
+	<bean id="musicAction" class="com.whty.life.action.MusicAction" scope="prototype">
+		<property name="musicService" ref="musicService"/>
+	</bean>
+</beans>

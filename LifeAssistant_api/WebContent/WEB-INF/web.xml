@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<!-- 下面的配置使得spring能够被web容器加载, 通过contextConfigLocation来指定配置文件的位置,可以使用通配符 
+		可以是相对路径也可以是绝对路径,相对路径可以相对于classpath(如下面的配置),也可以相对于WebRoot -->
+	<context-param>
+		<description>Spring配置文件</description>
+		<param-name>contextConfigLocation</param-name>
+		<!-- 配置文件存放在etc/spring/applicationContext*.xml -->
+		<param-value>
+			classpath:spring/applicationContext*.xml
+		</param-value>
+	</context-param>
+	
+	<listener>
+		<description>spring初始化监听器</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- 字符过滤器 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 因为struts2捕捉到异常不打印log，所以在该filter中截获一下异常，把log打印出来 -->
+	<filter>
+		<filter-name>errorLogFilter</filter-name>
+		<filter-class>com.whty.common.filter.ErrorLogFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>errorLogFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- struts2通过FilterDispatcher在Web容器中启动 -->
+	<filter>
+		<description>struts2核心控制器</description>
+		<filter-name>struts2</filter-name>
+		<!-- strurs2.1已经废弃了DispatchFilter,推荐使用StrutsPrepareAndExecuteFilter -->
+		<!-- <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class> -->
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+		<!-- <init-param>
+			<description>struts2配置文件</description>
+			struts-default.xml在struts-core-***.jar中 struts-plugin.xml在struts-***-plugin-***.jar中,struts2提供的一种可插拔的插件管理方式 
+				struts.xml在etc下,会被编译到classpath下面 该参数也可以不指定,FilterDispatcher默认会加载这三个配置文件 struts.properties不用指定,默认会加载classpath的struts.properties
+			<param-name>config</param-name>
+			<param-value>struts-default.xml,struts-plugin.xml,struts.xml
+			</param-value>
+		</init-param> -->
+	</filter>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	
+<!--   	<display-name>Web Service</display-name>       -->
+<!--     <listener>   -->
+<!--        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>   -->
+<!--     </listener>          -->
+<!--     <servlet>   -->
+<!--         <servlet-name>CXFService</servlet-name>   -->
+<!--         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>   -->
+<!--     </servlet>           -->
+<!--     <servlet-mapping>   -->
+<!--         <servlet-name>CXFService</servlet-name>   -->
+<!--         <url-pattern>/*</url-pattern>   -->
+<!--     </servlet-mapping>   -->
+	
+	
+	<!-- 错误页面的跳转 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/common/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>502</error-code>
+		<location>/common/error.jsp</location>
+	</error-page>
+	
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/tag/page</taglib-uri>
+			<taglib-location>/tld/pageTag.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file> 
+	</welcome-file-list>
+</web-app>
